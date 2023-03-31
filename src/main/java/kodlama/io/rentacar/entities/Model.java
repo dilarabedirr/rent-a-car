@@ -12,15 +12,16 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
-//@Data daha geniş bir yapı getiriyor @Getter @Setter sadece get set getiriyor.
-@Entity//veritabanı nesnesi yaptı
-@Table(name="brands")
-public class Brand {
+@Entity
+@Table(name="models")
+public class Model {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
-    @OneToMany(mappedBy="brand")//list varsa one ile başlayacağız.
-    private List<Model> models;
-
+    @ManyToOne
+    @JoinColumn(name="brand_id")//yazmasakta kolon bu isimde oluşur.
+    private Brand brand;
+    @OneToMany(mappedBy = "model") // ilişki sahibini belirliyoruz.modelin idsi araç içinde tutulduğu için burada ilişki sahibi model
+    private List<Car> cars;
 }
