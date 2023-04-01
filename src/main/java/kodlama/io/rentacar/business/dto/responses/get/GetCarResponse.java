@@ -16,4 +16,5 @@ public class GetCarResponse {
     private double dailyPrice;
     private State state;
     private int modelId;
+    private int modelYear;
 }
