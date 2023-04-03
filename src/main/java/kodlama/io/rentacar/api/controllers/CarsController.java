@@ -20,8 +20,8 @@ public class CarsController {
     private CarService service;
 
     @GetMapping
-    public List<GetAllCarsResponse> getAll(@RequestParam(required = false) String state) {
-        return service.getAll(state);
+    public List<GetAllCarsResponse> getAll(@RequestParam(defaultValue = "true") boolean showMaintance) {
+        return service.getAll(showMaintance);
     }
 
     @GetMapping("/{id}")
@@ -46,12 +46,4 @@ public class CarsController {
         service.delete(id);
     }
 
-    @PutMapping("/maintance")
-    public void sendCarToMaintenance(@RequestParam int id){
-        service.sendCarToMaintenance(id);
-    }
-    @PutMapping("/available")
-    public void carAvailable(@RequestParam int id){
-        service.carAvailable(id);
-    }
 }

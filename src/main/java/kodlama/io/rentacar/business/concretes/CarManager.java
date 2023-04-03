@@ -14,7 +14,6 @@ import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -25,18 +24,10 @@ public class CarManager implements CarService {
     private ModelMapper mapper;
 
     @Override
-    public List<GetAllCarsResponse> getAll(String state) {
+    public List<GetAllCarsResponse> getAll(boolean showMaintance) {
         List<Car> cars = repository.findAll();
-        if (state.equals("MAINTANCE")){
-            List<Car> maintanceCarList=new ArrayList<>();
-            for (Car car : cars) {
-                if (car.getState().name().equals("MAINTANCE")){
-                    maintanceCarList.add(car);
-                }
-            }
-            return maintanceCarList.stream().map(car -> mapper.map(car, GetAllCarsResponse.class)).toList();
-        }
         List<GetAllCarsResponse> responses = cars.stream()
+                .filter(car -> showMaintance || !car.getState().equals(State.MAINTANCE))
                 .map(car -> mapper.map(car, GetAllCarsResponse.class)).toList();
         return responses;
     }
@@ -71,43 +62,4 @@ public class CarManager implements CarService {
         repository.deleteById(id);
     }
 
-    public void sendCarToMaintenance(int id) {
-        Car car = repository.findById(id).orElseThrow();
-        checkIfCarStateRented(car.getState());
-        checkIfCarStateMaintance(car.getState());
-        car.setState(State.MAINTANCE);
-        car.setId(id);
-        repository.save(car);
-    }
-
-    public void carAvailable(int id) {
-        Car car = repository.findById(id).orElseThrow();
-        //checkIfCarStateRented(car.getState());
-        checkIfCarStateAvailable(car.getState());
-        car.setState(State.AVALIABLE);
-        car.setId(id);
-        repository.save(car);
-    }
-
-//    arabalar bakıma (maintenance) gönderilebilmelidir. Bakımdan gelen araba yeniden kiralanabilir duruma gelmelidir.
-//    Zaten bakımda olan araba bakıma gönderilememez. Kirada olan araba bakıma gönderilemez. Bakımda olan araba araba listesinde
-//    görüntülenip görüntülenmeyeceğine kullanıcıdan bir parametre alarak gelmelidir veya gelmemelidir.
-
-    private void checkIfCarStateRented(State state) {
-        if (state.equals(State.RENTED)) {
-            throw new RuntimeException("Araç kirada bakıma gönderilemez.");
-        }
-    }
-
-    private void checkIfCarStateMaintance(State state) {
-        if (state.equals(State.MAINTANCE)) {
-            throw new RuntimeException("bakımda olan araba bakıma gönderilemez");
-        }
-    }
-
-    private void checkIfCarStateAvailable(State state) {
-        if (state.equals(State.AVALIABLE)) {
-            throw new RuntimeException("Araba kiralanabilir durumda.");
-        }
-    }
 }
