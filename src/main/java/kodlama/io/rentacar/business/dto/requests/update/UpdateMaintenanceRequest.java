@@ -5,15 +5,19 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 public class UpdateMaintenanceRequest {
-    private Date startDate;
-    private Date dueDate;
-    private double maintenanceCost;
+    // burada tüm alanları alacağız.
     private int carId;
+    private String information;
+    private boolean isCompleted;
+    private LocalDateTime startDate;
+    private LocalDateTime dueDate;
+
+
 }

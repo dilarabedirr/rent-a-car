@@ -20,8 +20,8 @@ public class CarsController {
     private CarService service;
 
     @GetMapping
-    public List<GetAllCarsResponse> getAll(@RequestParam(defaultValue = "true") boolean showMaintance) {
-        return service.getAll(showMaintance);
+    public List<GetAllCarsResponse> getAll(@RequestParam(defaultValue = "true") boolean includeMaintenance) {
+        return service.getAll(includeMaintenance);
     }
 
     @GetMapping("/{id}")

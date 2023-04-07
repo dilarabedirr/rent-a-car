@@ -17,7 +17,7 @@ import java.util.List;
 @RequestMapping("/api/maintenances")
 @AllArgsConstructor
 public class MaintenancesController {
-    private MaintenanceService service;
+    private final MaintenanceService service;
 
     @GetMapping
     public List<GetAllMaintenancesResponse> getAll(){
@@ -32,14 +32,14 @@ public class MaintenancesController {
     public CreateMaintenanceResponse add(@RequestBody CreateMaintenanceRequest request) {
         return service.add(request);
     }
+    @PutMapping("/return/{carId}")
+    public GetMaintenanceResponse returnCarFromMaintenance(@PathVariable int carId){
+        return service.returnCarFromMaintenance(carId);
+    }
 
     @PutMapping("/{id}")
     public UpdateMaintenanceResponse update(@PathVariable int id, @RequestBody UpdateMaintenanceRequest request) {
         return service.update(id, request);
-    }
-    @PutMapping
-    public void finishMaintenance(@RequestParam int maintenanceId) {
-        service.finishMaintenance(maintenanceId);
     }
 
     @DeleteMapping("/{id}")

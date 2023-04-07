@@ -24,13 +24,13 @@ public class CarManager implements CarService {
     private ModelMapper mapper;
 
     @Override
-    public List<GetAllCarsResponse> getAll(boolean showMaintance) {
-        List<Car> cars = repository.findAll();
+    public List<GetAllCarsResponse> getAll(boolean includeMaintenance) {
+        List<Car> cars = filterCarsByMaintenanceState(includeMaintenance);
         List<GetAllCarsResponse> responses = cars.stream()
-                .filter(car -> showMaintance || !car.getState().equals(State.MAINTANCE))
                 .map(car -> mapper.map(car, GetAllCarsResponse.class)).toList();
         return responses;
     }
+
 
     @Override
     public GetCarResponse getById(int id) {
@@ -43,6 +43,7 @@ public class CarManager implements CarService {
     public CreateCarResponse add(CreateCarRequest request) {
         Car car = mapper.map(request, Car.class);
         car.setId(0);
+        car.setState(State.AVALIABLE);
         repository.save(car);
         CreateCarResponse response = mapper.map(car, CreateCarResponse.class);
         return response;
@@ -50,6 +51,7 @@ public class CarManager implements CarService {
 
     @Override
     public UpdateCarResponse update(int id, UpdateCarRequest request) {
+        checkIfExistsById(id);
         Car car = mapper.map(request, Car.class);
         car.setId(id);
         repository.save(car);
@@ -59,7 +61,27 @@ public class CarManager implements CarService {
 
     @Override
     public void delete(int id) {
+        checkIfExistsById(id);
         repository.deleteById(id);
     }
 
+    @Override
+    public void changeState(int carId, State state) {
+        Car car = repository.findById(carId).orElseThrow();
+        car.setState(state);
+        repository.save(car);
+    }
+
+    private void checkIfExistsById(int id) {
+        if (!repository.existsById(id)) {
+            throw new RuntimeException("Böyle bir araç bulunamadı!");
+        }
+    }
+
+    private List<Car> filterCarsByMaintenanceState(boolean includeMaintenance) {
+        if (includeMaintenance) {
+            return repository.findAll();
+        }
+        return repository.findAllByStateIsNot(State.MAINTENANCE);
+    }
 }

@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,10 +18,12 @@ public class Maintenance {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private Date startDate;
-    private Date dueDate;
-    private double maintenanceCost;
+    private LocalDateTime startDate;// bakıma alındığı tarih
+    private LocalDateTime dueDate;// bakımın bittiği tarih
+    private String information; // neden bakıma girdi
+    private boolean isCompleted; //bakım tamamlandı mı tamamlanmadı mı
     @ManyToOne
-    @JoinColumn(name="car_id")
+    @JoinColumn(name = "car_id")
     private Car car;
 }
+//private double maintenanceCost;//ayrı service olur faturalama için
