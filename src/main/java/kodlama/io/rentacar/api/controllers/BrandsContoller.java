@@ -4,8 +4,8 @@ import kodlama.io.rentacar.business.abstracts.BrandService;
 import kodlama.io.rentacar.business.dto.requests.create.CreateBrandRequest;
 import kodlama.io.rentacar.business.dto.requests.update.UpdateBrandRequest;
 import kodlama.io.rentacar.business.dto.responses.create.CreateBrandResponse;
-import kodlama.io.rentacar.business.dto.responses.get.GetAllBrandsResponse;
-import kodlama.io.rentacar.business.dto.responses.get.GetBrandResponse;
+import kodlama.io.rentacar.business.dto.responses.get.brand.GetAllBrandsResponse;
+import kodlama.io.rentacar.business.dto.responses.get.brand.GetBrandResponse;
 import kodlama.io.rentacar.business.dto.responses.update.UpdateBrandResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -28,6 +28,11 @@ public class BrandsContoller {
 
     public GetBrandResponse getById(@PathVariable int id) {
         return brandService.getById(id);
+    }
+    @GetMapping("/name")
+
+    public GetBrandResponse getByName(@RequestParam String name) {
+        return brandService.getByName(name);
     }
 
     @PostMapping

@@ -4,8 +4,8 @@ import kodlama.io.rentacar.business.abstracts.BrandService;
 import kodlama.io.rentacar.business.dto.requests.create.CreateBrandRequest;
 import kodlama.io.rentacar.business.dto.requests.update.UpdateBrandRequest;
 import kodlama.io.rentacar.business.dto.responses.create.CreateBrandResponse;
-import kodlama.io.rentacar.business.dto.responses.get.GetAllBrandsResponse;
-import kodlama.io.rentacar.business.dto.responses.get.GetBrandResponse;
+import kodlama.io.rentacar.business.dto.responses.get.brand.GetAllBrandsResponse;
+import kodlama.io.rentacar.business.dto.responses.get.brand.GetBrandResponse;
 import kodlama.io.rentacar.business.dto.responses.update.UpdateBrandResponse;
 import kodlama.io.rentacar.entities.Brand;
 import kodlama.io.rentacar.repository.BrandRepository;
@@ -33,6 +33,13 @@ public class BrandManager implements BrandService {
     public GetBrandResponse getById(int id) {
         checkIfBrandExists(id);
         Brand brand= repository.findById(id).orElseThrow();
+        GetBrandResponse response=modelMapper.map(brand,GetBrandResponse.class);
+        return response;
+    }
+    @Override
+    public GetBrandResponse getByName(String name) {
+        checkIfBrandNameExists(name);
+        Brand brand= repository.findByName(name);
         GetBrandResponse response=modelMapper.map(brand,GetBrandResponse.class);
         return response;
     }
@@ -75,4 +82,10 @@ public class BrandManager implements BrandService {
     private void checkIfBrandExists(int id) {
         if (!repository.existsById(id)) throw new RuntimeException("marka bulunamadı.");
     }
+    private void checkIfBrandNameExists(String name){
+        if (!repository.existsByName(name)){
+            throw new RuntimeException("Bu isimde marka bulunamadı!");
+        }
+    }
 }
+
