@@ -1,6 +1,7 @@
 package kodlama.io.rentacar.business.concretes;
 
 import kodlama.io.rentacar.business.abstracts.CarService;
+import kodlama.io.rentacar.business.abstracts.PaymentService;
 import kodlama.io.rentacar.business.abstracts.RentalService;
 import kodlama.io.rentacar.business.dto.requests.create.CreateRentalRequest;
 import kodlama.io.rentacar.business.dto.requests.update.UpdateRentalRequest;
@@ -8,6 +9,7 @@ import kodlama.io.rentacar.business.dto.responses.create.CreateRentalResponse;
 import kodlama.io.rentacar.business.dto.responses.get.rental.GetAllRentalsResponse;
 import kodlama.io.rentacar.business.dto.responses.get.rental.GetRentalResponse;
 import kodlama.io.rentacar.business.dto.responses.update.UpdateRentalResponse;
+import kodlama.io.rentacar.common.dto.CreateRentalPaymentRequest;
 import kodlama.io.rentacar.entities.Rental;
 import kodlama.io.rentacar.entities.enums.State;
 import kodlama.io.rentacar.repository.RentalRepository;
@@ -24,6 +26,7 @@ public class RentalManager implements RentalService {
     private final RentalRepository repository;
     private final ModelMapper mapper;
     private final CarService carService;
+    private final PaymentService paymentService;
 
     @Override
     public List<GetAllRentalsResponse> getAll() {
@@ -48,6 +51,12 @@ public class RentalManager implements RentalService {
         rental.setId(0);
         rental.setStartDate(LocalDateTime.now());
         rental.setTotalPrice(getTotalPrice(rental));
+
+        CreateRentalPaymentRequest paymentRequest=new CreateRentalPaymentRequest();
+        mapper.map(request.getPaymentRequest(),paymentRequest);
+        paymentRequest.setPrice(getTotalPrice(rental));
+        paymentService.processRentalPayment(paymentRequest);
+
         repository.save(rental);
         carService.changeState(request.getCarId(), State.RENTED);
         CreateRentalResponse response = mapper.map(rental, CreateRentalResponse.class);
