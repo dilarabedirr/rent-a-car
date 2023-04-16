@@ -16,10 +16,10 @@ public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private String cardNumber;
-    private String cardHolder;
-    private int cardExpirationYear;
-    private int cardExpirationMonth;
+    private String cardNumber; // kart numarası
+    private String cardHolder; // kart sahibi
+    private int cardExpirationYear; // son kullanma yılı
+    private int cardExpirationMonth; // son kullanma ayı
     private String cardCvv;
     private double balance;
 }

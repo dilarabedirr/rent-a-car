@@ -15,7 +15,7 @@ import org.hibernate.validator.constraints.Length;
 @Getter
 @Setter
 public class PaymentRequest {//base
-    @NotBlank(message = "kart numarası noş bırakılamaz.")//string değerlerde notnull sayısal değerlerde
+    @NotBlank(message = "kart numarası boş bırakılamaz.")//notblank string değerlerde notnull sayısal değerlerde
     @Length(min = 16, max = 16)
     private String cardNumber;
     @NotBlank
@@ -28,6 +28,7 @@ public class PaymentRequest {//base
     @Max(value = 12)
     @Min(value = 1)
     private int cardExpirationMonth;
+    @NotBlank
     @Length(min = 3, max = 3)
     private String cardCvv;
 }

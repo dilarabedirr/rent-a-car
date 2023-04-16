@@ -9,4 +9,14 @@ public interface PaymentRepository extends JpaRepository<Payment,Integer> {
     boolean existsByCardNumberAndCardHolderAndCardExpirationYearAndCardExpirationMonthAndCardCvv(
             String cardNumber, String cardHolder,int cardExpirationYear,int cardExpirationMonth,String cardCvv
     );
+
+    //SPeL - spring expression language
+//    @Query("SELECT CASE WHEN COUNT(p) > 0 THEN true ELSE false END"+
+//            "FROM Payment p WHERE p.cardNumber = :#{#paymentRequest.cardNumber}" +
+//            " AND p.cardHolder = :#{#paymentRequest.cardHolder} AND" +
+//            " p.cardExpirationYear = :#{#paymentRequest.cardExpirationYear} AND" +
+//            " p.cardExpirationMonth = :#{#paymentRequest.cardExpirationMonth} AND" +
+//            " p.cardCvv = :#{#paymentRequest.cardCvv}"
+//    )
+//    boolean test(@Param("paymentRequest")PaymentRequest paymentRequest);
 }

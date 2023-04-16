@@ -1,4 +1,4 @@
-package kodlama.io.rentacar.adapters;
+package kodlama.io.rentacar.business.abstracts;
 
 public interface PosService {
     void pay();
