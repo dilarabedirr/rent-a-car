@@ -28,12 +28,14 @@ public class PaymentsController {
     public GetPaymentResponse getById(@PathVariable int id) {
         return service.getById(id);
     }
+
     @PostMapping
-    public CreatePaymentResponse add(@Valid @RequestBody CreatePaymentRequest request){
+    public CreatePaymentResponse add(@Valid @RequestBody CreatePaymentRequest request) {
         return service.add(request);
     }
+
     @PutMapping("/{id}")
-    public UpdatePaymentResponse update(@PathVariable int id,@Valid @RequestBody UpdatePaymentRequest request) {
+    public UpdatePaymentResponse update(@PathVariable int id, @Valid @RequestBody UpdatePaymentRequest request) {
         return service.update(id, request);
     }
 

@@ -11,9 +11,14 @@ import java.util.List;
 
 public interface BrandService {
     List<GetAllBrandsResponse> getAll();
+
     GetBrandResponse getById(int id);
+
     GetBrandResponse getByName(String name);
+
     CreateBrandResponse add(CreateBrandRequest request);
+
     UpdateBrandResponse update(int id, UpdateBrandRequest request);
+
     void delete(int id);
 }

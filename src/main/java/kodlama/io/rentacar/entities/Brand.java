@@ -14,13 +14,13 @@ import java.util.List;
 @Setter
 //@Data daha geniş bir yapı getiriyor @Getter @Setter sadece get set getiriyor.
 @Entity//veritabanı nesnesi yaptı
-@Table(name="brands")
+@Table(name = "brands")
 public class Brand {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
-    @OneToMany(mappedBy="brand")//list varsa one ile başlayacağız.
+    @OneToMany(mappedBy = "brand")//list varsa one ile başlayacağız.
     private List<Model> models;
 
 }

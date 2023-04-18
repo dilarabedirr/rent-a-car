@@ -29,6 +29,7 @@ public class BrandsContoller {
     public GetBrandResponse getById(@PathVariable int id) {
         return brandService.getById(id);
     }
+
     @GetMapping("/name")
 
     public GetBrandResponse getByName(@RequestParam String name) {

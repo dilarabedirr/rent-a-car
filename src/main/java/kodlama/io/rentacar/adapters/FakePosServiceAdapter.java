@@ -1,6 +1,8 @@
 package kodlama.io.rentacar.adapters;
 
 import kodlama.io.rentacar.business.abstracts.PosService;
+import kodlama.io.rentacar.common.constants.Messages;
+import kodlama.io.rentacar.core.exceptions.BusinessException;
 import org.springframework.stereotype.Service;
 
 import java.util.Random;
@@ -9,7 +11,7 @@ import java.util.Random;
 public class FakePosServiceAdapter implements PosService {
     @Override
     public void pay() {
-        boolean isPaymentSuccesful=new Random().nextBoolean();
-        if (!isPaymentSuccesful) throw new RuntimeException("ödeme reddedildi.");
+        boolean isPaymentSuccesful = new Random().nextBoolean();
+        if (!isPaymentSuccesful) throw new BusinessException(Messages.Payment.Failed);
     }
 }

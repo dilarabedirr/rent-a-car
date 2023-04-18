@@ -14,8 +14,12 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name="cars")
+@Table(name = "cars")
 public class Car {
+    @OneToMany(mappedBy = "car")
+    List<Maintenance> maintenances;
+    @OneToMany(mappedBy = "car")
+    List<Rental> rentals;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -25,10 +29,6 @@ public class Car {
     @Enumerated(EnumType.STRING)
     private State state; // 1 - available, 2 - rented, 3 - maintance
     @ManyToOne
-    @JoinColumn(name="model_id")
+    @JoinColumn(name = "model_id")
     private Model model;
-    @OneToMany(mappedBy = "car")
-    List<Maintenance> maintenances;
-    @OneToMany(mappedBy = "car")
-    List<Rental> rentals;
 }

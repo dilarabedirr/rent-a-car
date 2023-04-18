@@ -7,6 +7,7 @@ import kodlama.io.rentacar.business.dto.responses.create.CreateBrandResponse;
 import kodlama.io.rentacar.business.dto.responses.get.brand.GetAllBrandsResponse;
 import kodlama.io.rentacar.business.dto.responses.get.brand.GetBrandResponse;
 import kodlama.io.rentacar.business.dto.responses.update.UpdateBrandResponse;
+import kodlama.io.rentacar.business.rules.BrandBusinessRules;
 import kodlama.io.rentacar.entities.Brand;
 import kodlama.io.rentacar.repository.BrandRepository;
 import lombok.AllArgsConstructor;
@@ -20,27 +21,29 @@ import java.util.List;
 public class BrandManager implements BrandService {
     private final BrandRepository repository;
     private final ModelMapper modelMapper;
+    private final BrandBusinessRules rules;
 
     @Override
     public List<GetAllBrandsResponse> getAll() {
-        List<Brand> brands=repository.findAll();
-        List<GetAllBrandsResponse> responses=brands.stream()
-                .map(brand -> modelMapper.map(brand,GetAllBrandsResponse.class)).toList();
+        List<Brand> brands = repository.findAll();
+        List<GetAllBrandsResponse> responses = brands.stream()
+                .map(brand -> modelMapper.map(brand, GetAllBrandsResponse.class)).toList();
         return responses;
     }
 
     @Override
     public GetBrandResponse getById(int id) {
-        checkIfBrandExists(id);
-        Brand brand= repository.findById(id).orElseThrow();
-        GetBrandResponse response=modelMapper.map(brand,GetBrandResponse.class);
+        rules.checkIfBrandExists(id);
+        Brand brand = repository.findById(id).orElseThrow();
+        GetBrandResponse response = modelMapper.map(brand, GetBrandResponse.class);
         return response;
     }
+
     @Override
     public GetBrandResponse getByName(String name) {
-        checkIfBrandNameExists(name);
-        Brand brand= repository.findByName(name);
-        GetBrandResponse response=modelMapper.map(brand,GetBrandResponse.class);
+        rules.checkIfBrandExistsByName(name);
+        Brand brand = repository.findByName(name);
+        GetBrandResponse response = modelMapper.map(brand, GetBrandResponse.class);
         return response;
     }
 
@@ -56,36 +59,28 @@ public class BrandManager implements BrandService {
 //        response.setName(brand.getName());
 //        return response;
         // model mapper ile mapleme
-        Brand brand=modelMapper.map(request,Brand.class);
+        Brand brand = modelMapper.map(request, Brand.class);
         brand.setId(0);
         repository.save(brand);
-        CreateBrandResponse response=modelMapper.map(brand,CreateBrandResponse.class);
+        CreateBrandResponse response = modelMapper.map(brand, CreateBrandResponse.class);
         return response;
     }
 
     @Override
     public UpdateBrandResponse update(int id, UpdateBrandRequest request) {
-        checkIfBrandExists(id);
-        Brand brand=modelMapper.map(request,Brand.class);
+        rules.checkIfBrandExists(id);
+        Brand brand = modelMapper.map(request, Brand.class);
         brand.setId(id);
         repository.save(brand);
-        UpdateBrandResponse response=modelMapper.map(brand,UpdateBrandResponse.class);
+        UpdateBrandResponse response = modelMapper.map(brand, UpdateBrandResponse.class);
         return response;
     }
 
     @Override
     public void delete(int id) {
-        checkIfBrandExists(id);
+        rules.checkIfBrandExists(id);
         repository.deleteById(id);
     }
 
-    private void checkIfBrandExists(int id) {
-        if (!repository.existsById(id)) throw new RuntimeException("marka bulunamadı.");
-    }
-    private void checkIfBrandNameExists(String name){
-        if (!repository.existsByName(name)){
-            throw new RuntimeException("Bu isimde marka bulunamadı!");
-        }
-    }
 }
 

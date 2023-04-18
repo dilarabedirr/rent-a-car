@@ -20,5 +20,6 @@ public interface PaymentService {
     UpdatePaymentResponse update(int id, UpdatePaymentRequest request);
 
     void delete(int id);
+
     void processRentalPayment(CreateRentalPaymentRequest request);
 }
