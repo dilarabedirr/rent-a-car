@@ -36,6 +36,7 @@ public class CarManager implements CarService {
 
     @Override
     public GetCarResponse getById(int id) {
+        rules.checkIfCarExists(id);
         Car car = repository.findById(id).orElseThrow();
         GetCarResponse response = mapper.map(car, GetCarResponse.class);
         return response;
